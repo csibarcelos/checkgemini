@@ -64,7 +64,6 @@ export const SuperAdminAllProductsPage: React.FC = () => {
       setAllProducts(productsData);
       setAllUsers(usersData);
       if (productsData.length === 0) {
-        // setError("Nenhum produto encontrado na plataforma."); // UI handles empty state
       }
     } catch (err: any) {
       setError(err.message || 'Falha ao carregar dados.');
@@ -95,7 +94,6 @@ export const SuperAdminAllProductsPage: React.FC = () => {
           valA = getUserEmail(a.platformUserId).toLowerCase();
           valB = getUserEmail(b.platformUserId).toLowerCase();
         } else {
-          // Type assertion to access product properties
           valA = (a as any)[key];
           valB = (b as any)[key];
         }
@@ -106,12 +104,11 @@ export const SuperAdminAllProductsPage: React.FC = () => {
         if (typeof valA === 'number' && typeof valB === 'number') {
           return sortConfig.direction === 'ascending' ? valA - valB : valB - valA;
         }
-        // Fallback for null/undefined or mixed types - treat nulls as smaller
         if (valA == null && valB != null) return -1;
         if (valA != null && valB == null) return 1;
         if (valA == null && valB == null) return 0;
         
-        return 0; // Default no sort if types are mixed or unhandled
+        return 0; 
       });
     }
     return sortableItems;

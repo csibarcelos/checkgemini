@@ -111,4 +111,25 @@ export const SuperAdminUsersPage: React.FC = () => {
   const isCurrentUserSelected = selectedUser?.id === loggedInSuperAdmin?.id;
 
   if (isLoading) {
-    return <div className="flex justify-
+    return <div className="flex justify-center items-center h-64"><LoadingSpinner size="lg" /></div>;
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center space-x-3">
+        <UsersIcon className="h-8 w-8 text-primary" />
+        <h1 className="text-3xl font-bold text-neutral-800">Todos os Usuários ({users.length})</h1>
+      </div>
+
+      {error && <p className="text-red-500 bg-red-50 p-3 rounded-md">{error}</p>}
+      
+      {users.length === 0 && !isLoading && !error && (
+         <p className="p-6 text-center text-neutral-500">Nenhum usuário encontrado na plataforma.</p>
+      )}
+
+
+      {users.length > 0 && (
+        <Card className="p-0 sm:p-0">
+            <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-neutral-200">
+                <thead

@@ -19,32 +19,17 @@ const formatCurrency = (valueInCents: number): string => {
 
 const triggerConversionEvent = (orderId: string, orderValue: number, currency: string, products: SaleProductItem[]) => {
   console.log(`CONVERSION EVENT: Order ${orderId}, Value ${orderValue} ${currency}, Products:`, products.map(p => p.name));
-  // Placeholder for actual conversion tracking (e.g., Facebook Pixel, Google Ads)
-  // Example:
-  // if (typeof window.fbq === 'function') {
-  //   window.fbq('track', 'Purchase', {
-  //     value: (orderValue / 100).toFixed(2),
-  //     currency: currency,
-  //     content_ids: products.map(p => p.productId),
-  //     content_type: 'product',
-  //     order_id: orderId
-  //   });
-  // }
 };
 
 const getContrastingTextColor = (hexColor?: string): string => {
-    if (!hexColor) return '#111827'; // Default dark text for light backgrounds
+    if (!hexColor) return '#111827'; 
     try {
-      // Convert hex to RGB
       const r = parseInt(hexColor.slice(1, 3), 16);
       const g = parseInt(hexColor.slice(3, 5), 16);
       const b = parseInt(hexColor.slice(5, 7), 16);
-      // Calculate luminance
       const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-      // Return black for light backgrounds, white for dark backgrounds
       return luminance > 0.5 ? '#111827' : '#FFFFFF'; 
     } catch (e) {
-      // Fallback in case of error (e.g., invalid hex)
       return '#111827'; 
     }
 };
@@ -104,12 +89,11 @@ export const ThankYouPage: React.FC = () => {
       if (originalProductIdFromUrl) {
         const fetchedOrigProduct = await productService.getProductById(originalProductIdFromUrl, null);
         setOriginalProductDetails(fetchedOrigProduct || null);
-        if (fetchedOrigProduct?.upsell && !fetchedSale.upsellPushInPayTransactionId) { // Check if upsell already exists
+        if (fetchedOrigProduct?.upsell && !fetchedSale.upsellPushInPayTransactionId) { 
           setUpsellOffer(fetchedOrigProduct.upsell);
           if (fetchedOrigProduct.upsell.customPriceInCents !== undefined) {
             setUpsellProductPrice(fetchedOrigProduct.upsell.customPriceInCents);
           } else {
-            // Need to fetch the actual upsell product to get its price
             const fullUpsellProduct = await productService.getProductById(fetchedOrigProduct.upsell.productId, null);
             setUpsellProductPrice(fullUpsellProduct?.priceInCents || 0);
           }
@@ -156,8 +140,6 @@ export const ThankYouPage: React.FC = () => {
         }],
         isUpsellTransaction: true,
         originalSaleId: mainSaleDetails.id,
-        // Potencialmente adicionar trackingParameters do mainSaleDetails, se aplicável
-        // trackingParameters: mainSaleDetails.trackingParameters,
       };
 
       console.log("ThankYouPage: Invocando 'gerar-pix' para upsell com payload:", upsellPixPayload, "para productOwnerUserId:", mainSaleDetails.platformUserId);
@@ -191,9 +173,6 @@ export const ThankYouPage: React.FC = () => {
 
       if (pixFunctionResponse && pixFunctionResponse.success && pixFunctionResponse.data) {
         setUpsellPixData(pixFunctionResponse.data);
-        // Aqui você pode querer iniciar um polling para o status do PIX do upsell,
-        // e quando pago, atualizar a venda original com o upsellPushInPayTransactionId
-        // e adicionar o produto do upsell à lista de produtos da venda.
       } else {
         throw new Error(pixFunctionResponse?.message || "A resposta da função não continha os dados do PIX para o upsell.");
       }
@@ -208,7 +187,7 @@ export const ThankYouPage: React.FC = () => {
   
   const handleDeclineUpsell = () => {
     setShowUpsellModal(false);
-    setUpsellPixData(null); // Reset PIX data if declined after PIX was generated
+    setUpsellPixData(null);
   };
 
   const copyUpsellPixCode = () => {

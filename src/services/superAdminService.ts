@@ -204,7 +204,6 @@ export const superAdminService = {
       throw new Error("Autenticação de super admin necessária.");
     }
     
-    // Select all relevant fields for a Product
     const columnsToSelect = 'id, platform_user_id, slug, name, description, price_in_cents, image_url, checkout_customization, delivery_url, total_sales, clicks, checkout_views, conversion_rate, abandonment_rate, order_bump, upsell, coupons, created_at, updated_at';
     console.log(`[superAdminService] Attempting to select columns for products: ${columnsToSelect}`);
 
